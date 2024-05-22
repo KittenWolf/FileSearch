@@ -38,9 +38,9 @@
             this.BackgroundWorker = new System.ComponentModel.BackgroundWorker();
             this.CancelSearchBtn = new System.Windows.Forms.Button();
             this.ScannedFilesCounter = new System.Windows.Forms.Label();
-            this.FilesMatchedCounter = new System.Windows.Forms.Label();
+            this.MatchedFilesCounter = new System.Windows.Forms.Label();
             this.ScannedFilesCount = new System.Windows.Forms.Label();
-            this.FilesMatchedCount = new System.Windows.Forms.Label();
+            this.MatchedFilesCount = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // SearchBtn
@@ -56,7 +56,7 @@
             // FolderBrowserDialog
             // 
             this.FolderBrowserDialog.Description = "FolderBrowser";
-            this.FolderBrowserDialog.SelectedPath = "C:\\Users\\WorkHard\\Desktop";
+            this.FolderBrowserDialog.SelectedPath = "G:\\Programm Files (x86)\\Steam\\steamapps";
             this.FolderBrowserDialog.ShowNewFolderButton = false;
             // 
             // DirectoryPathLabel
@@ -64,7 +64,7 @@
             this.DirectoryPathLabel.AutoSize = true;
             this.DirectoryPathLabel.Location = new System.Drawing.Point(106, 58);
             this.DirectoryPathLabel.Name = "DirectoryPathLabel";
-            this.DirectoryPathLabel.Size = new System.Drawing.Size(148, 13);
+            this.DirectoryPathLabel.Size = new System.Drawing.Size(211, 13);
             this.DirectoryPathLabel.TabIndex = 3;
             this.DirectoryPathLabel.Text = this.FolderBrowserDialog.SelectedPath;
             // 
@@ -97,9 +97,9 @@
             // FileExplorer
             // 
             this.FileExplorer.AllowDrop = true;
-            this.FileExplorer.Location = new System.Drawing.Point(25, 224);
+            this.FileExplorer.Location = new System.Drawing.Point(374, 53);
             this.FileExplorer.Name = "FileExplorer";
-            this.FileExplorer.Size = new System.Drawing.Size(400, 242);
+            this.FileExplorer.Size = new System.Drawing.Size(400, 371);
             this.FileExplorer.TabIndex = 7;
             // 
             // CancelSearchBtn
@@ -115,47 +115,47 @@
             // ScannedFilesCounter
             // 
             this.ScannedFilesCounter.AutoSize = true;
-            this.ScannedFilesCounter.Location = new System.Drawing.Point(22, 184);
+            this.ScannedFilesCounter.Location = new System.Drawing.Point(371, 462);
             this.ScannedFilesCounter.Name = "ScannedFilesCounter";
             this.ScannedFilesCounter.Size = new System.Drawing.Size(104, 13);
             this.ScannedFilesCounter.TabIndex = 9;
             this.ScannedFilesCounter.Text = "Scanned files count:";
             // 
-            // FilesMatchedCounter
+            // MatchedFilesCounter
             // 
-            this.FilesMatchedCounter.AutoSize = true;
-            this.FilesMatchedCounter.Location = new System.Drawing.Point(22, 197);
-            this.FilesMatchedCounter.Name = "FilesMatchedCounter";
-            this.FilesMatchedCounter.Size = new System.Drawing.Size(75, 13);
-            this.FilesMatchedCounter.TabIndex = 10;
-            this.FilesMatchedCounter.Text = "Files matched:";
+            this.MatchedFilesCounter.AutoSize = true;
+            this.MatchedFilesCounter.Location = new System.Drawing.Point(371, 449);
+            this.MatchedFilesCounter.Name = "MatchedFilesCounter";
+            this.MatchedFilesCounter.Size = new System.Drawing.Size(75, 13);
+            this.MatchedFilesCounter.TabIndex = 10;
+            this.MatchedFilesCounter.Text = "Files matched:";
             // 
             // ScannedFilesCount
             // 
             this.ScannedFilesCount.AutoSize = true;
-            this.ScannedFilesCount.Location = new System.Drawing.Point(132, 184);
+            this.ScannedFilesCount.Location = new System.Drawing.Point(481, 462);
             this.ScannedFilesCount.Name = "ScannedFilesCount";
             this.ScannedFilesCount.Size = new System.Drawing.Size(13, 13);
             this.ScannedFilesCount.TabIndex = 11;
             this.ScannedFilesCount.Text = "0";
             // 
-            // FilesMatchedCount
+            // MatchedFilesCount
             // 
-            this.FilesMatchedCount.AutoSize = true;
-            this.FilesMatchedCount.Location = new System.Drawing.Point(103, 197);
-            this.FilesMatchedCount.Name = "FilesMatchedCount";
-            this.FilesMatchedCount.Size = new System.Drawing.Size(13, 13);
-            this.FilesMatchedCount.TabIndex = 12;
-            this.FilesMatchedCount.Text = "0";
+            this.MatchedFilesCount.AutoSize = true;
+            this.MatchedFilesCount.Location = new System.Drawing.Point(481, 449);
+            this.MatchedFilesCount.Name = "MatchedFilesCount";
+            this.MatchedFilesCount.Size = new System.Drawing.Size(13, 13);
+            this.MatchedFilesCount.TabIndex = 12;
+            this.MatchedFilesCount.Text = "0";
             // 
             // FileSearchForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 499);
-            this.Controls.Add(this.FilesMatchedCount);
+            this.Controls.Add(this.MatchedFilesCount);
             this.Controls.Add(this.ScannedFilesCount);
-            this.Controls.Add(this.FilesMatchedCounter);
+            this.Controls.Add(this.MatchedFilesCounter);
             this.Controls.Add(this.ScannedFilesCounter);
             this.Controls.Add(this.CancelSearchBtn);
             this.Controls.Add(this.FileExplorer);
@@ -183,9 +183,9 @@
         private System.ComponentModel.BackgroundWorker BackgroundWorker;
         private System.Windows.Forms.Button CancelSearchBtn;
         private System.Windows.Forms.Label ScannedFilesCounter;
-        private System.Windows.Forms.Label FilesMatchedCounter;
+        private System.Windows.Forms.Label MatchedFilesCounter;
         private System.Windows.Forms.Label ScannedFilesCount;
-        private System.Windows.Forms.Label FilesMatchedCount;
+        private System.Windows.Forms.Label MatchedFilesCount;
     }
 }
 

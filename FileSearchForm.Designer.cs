@@ -35,7 +35,6 @@
             this.FileRegExLabel = new System.Windows.Forms.Label();
             this.ChangeDirectoryBtn = new System.Windows.Forms.Button();
             this.FileExplorer = new System.Windows.Forms.TreeView();
-            this.BackgroundWorker = new System.ComponentModel.BackgroundWorker();
             this.CancelSearchBtn = new System.Windows.Forms.Button();
             this.ScannedFilesCounter = new System.Windows.Forms.Label();
             this.FilesMatchedCounter = new System.Windows.Forms.Label();
@@ -56,7 +55,7 @@
             // FolderBrowserDialog
             // 
             this.FolderBrowserDialog.Description = "FolderBrowser";
-            this.FolderBrowserDialog.SelectedPath = "C:\\Users\\WorkHard\\Desktop";
+            this.FolderBrowserDialog.SelectedPath = "G:\\Programm Files (x86)\\Steam\\steamapps";
             this.FolderBrowserDialog.ShowNewFolderButton = false;
             // 
             // DirectoryPathLabel
@@ -180,7 +179,6 @@
         private System.Windows.Forms.FolderBrowserDialog FolderBrowserDialog;
         private System.Windows.Forms.Button ChangeDirectoryBtn;
         private System.Windows.Forms.TreeView FileExplorer;
-        private System.ComponentModel.BackgroundWorker BackgroundWorker;
         private System.Windows.Forms.Button CancelSearchBtn;
         private System.Windows.Forms.Label ScannedFilesCounter;
         private System.Windows.Forms.Label FilesMatchedCounter;

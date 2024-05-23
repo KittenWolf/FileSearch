@@ -1,46 +1,41 @@
 ﻿using System;
-using System.ComponentModel;
+using System.Collections.Generic;
 using System.IO;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace FileSearch
 {
     internal class FileSearcher
     {
+        private delegate void FileSearcherAction(TreeNode node);
+
         private readonly TreeView _treeView;
-        private readonly Label _scannedFiles;
-        private readonly Label _matchedFiles;
-        private readonly BackgroundWorker _worker;
         private Regex _regex;
         private TreeNode _root;
-        private int _scannedFilesCount = 0;
-        private int _matchedFilesCount = 0;
+        private LinkedList<TreeNode> _activeBranch;
 
-        public FileSearcher(TreeView treeView, Label scannedFiles, Label matchedFiles, BackgroundWorker worker) 
+        public FileSearcher(TreeView treeView) 
         {
             _treeView = treeView;
-            _scannedFiles = scannedFiles;
-            _matchedFiles = matchedFiles;
-            _worker = worker;
         }
 
-        public void Search(string path, string pattern)
+        public async void Search(string path, string pattern)
         {
-            _scannedFilesCount = 0;
-            _matchedFilesCount = 0;
-
             _root = new TreeNode(path);
             _regex = new Regex(pattern);
+            _activeBranch = new LinkedList<TreeNode>();
 
+            _activeBranch.AddFirst(_root);
             _treeView.Nodes.Add(_root);
 
-            SearchByBranch(_root);
+            await Task.Run(() => BuildBranchNodes(_root));
         }
 
-        public bool SearchByBranch(TreeNode branch)
+        private void BuildBranchNodes(TreeNode branch)
         {
-            bool result = false;
+            BuildFileNodes(branch);
 
             try
             {
@@ -48,52 +43,73 @@ namespace FileSearch
                 {
                     var newBranch = new TreeNode(dir);
 
-                    branch.Nodes.Add(newBranch);
-                    var tempResult = SearchByBranch(newBranch);
-
-                    if (!tempResult)
-                    {
-                        branch.Nodes.Remove(newBranch);
-                    }
-
-                    newBranch.Text = Path.GetFileName(dir);
-                    result |= tempResult;
+                    UpdateFileSearcher(newBranch, BuildBranchNodes);
                 }
+            }
+            catch (Exception)
+            {
+                throw;
+            }           
+        }
 
-                foreach (var file in Directory.GetFiles(branch.Text))
+        private void LinkTreeNodes(TreeNode node)
+        {
+            var last = _activeBranch.FindLast(node);
+
+            while (last.Value.Parent == null && last.Value != _root)
+            {
+                UpdateTreeNode(last.Value, last.Previous.Value);
+
+                last = last.Previous;
+            }
+        }
+
+        private void UpdateFileSearcher(TreeNode node, FileSearcherAction action)
+        {
+            _activeBranch.AddLast(node);  
+            
+            action.Invoke(node);
+
+            _activeBranch.RemoveLast();
+        }
+
+        private void BuildFileNodes(TreeNode parent)
+        {
+            try
+            {
+                foreach (var file in Directory.GetFiles(parent.Text))
                 {
                     var fileName = Path.GetFileName(file);
 
-                    _scannedFilesCount++;
-
                     if (_regex.IsMatch(fileName))
                     {
-                        UpdateTreeView(branch, fileName);
+                        var fileNode = new TreeNode(file);
 
-                        _matchedFilesCount++;
-
-                        result = true;
+                        UpdateFileSearcher(fileNode, LinkTreeNodes);
                     }
                 }
             }
             catch (Exception)
             {
-                Console.WriteLine("Exception");
+                throw;
             }
-
-            _scannedFiles.Text = _scannedFilesCount.ToString();
-            _matchedFiles.Text = _matchedFilesCount.ToString();
-
-            return result;
         }
 
-        private void UpdateTreeView(TreeNode branch, string info)
+        private void UpdateTreeNode(TreeNode node, TreeNode branch)
         {
-            _treeView.BeginUpdate();
+            //node.Text = Path.GetFileName(node.Text);
 
-            branch.Nodes.Add(info);
+            _treeView.BeginInvoke(new Action(() =>
+            {
+                _treeView.BeginUpdate();
 
-            _treeView.EndUpdate();
+                if (!branch.Nodes.Contains(node))
+                {
+                    branch.Nodes.Add(node);
+                }
+
+                _treeView.EndUpdate();
+            }));
         }
     }
 }

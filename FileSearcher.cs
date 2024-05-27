@@ -17,6 +17,8 @@ namespace FileSearch
 
     internal class FileSearcher
     {
+        private delegate void FileSearcherAction(TreeNode node);
+
         private readonly TreeView _treeView;
         private readonly BackgroundWorker _worker;
         private readonly DoWorkEventArgs _e;

@@ -39,13 +39,13 @@
             this.MatchedFilesCounter = new System.Windows.Forms.Label();
             this.ScannedFilesCount = new System.Windows.Forms.Label();
             this.MatchedFilesCount = new System.Windows.Forms.Label();
-            this.CurrentPath = new System.Windows.Forms.Label();
-            this.CurrentDirPath = new System.Windows.Forms.Label();
+            this.RootPathLabel = new System.Windows.Forms.Label();
+            this.StopSearchBtn = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // SearchBtn
             // 
-            this.SearchBtn.Location = new System.Drawing.Point(114, 74);
+            this.SearchBtn.Location = new System.Drawing.Point(33, 74);
             this.SearchBtn.Name = "SearchBtn";
             this.SearchBtn.Size = new System.Drawing.Size(75, 23);
             this.SearchBtn.TabIndex = 0;
@@ -77,7 +77,7 @@
             // 
             // ChangeDirectoryBtn
             // 
-            this.ChangeDirectoryBtn.Location = new System.Drawing.Point(33, 74);
+            this.ChangeDirectoryBtn.Location = new System.Drawing.Point(195, 74);
             this.ChangeDirectoryBtn.Name = "ChangeDirectoryBtn";
             this.ChangeDirectoryBtn.Size = new System.Drawing.Size(75, 23);
             this.ChangeDirectoryBtn.TabIndex = 6;
@@ -129,31 +129,33 @@
             this.MatchedFilesCount.TabIndex = 12;
             this.MatchedFilesCount.Text = "0";
             // 
-            // CurrentPath
+            // RootPathLabel
             // 
-            this.CurrentPath.AutoSize = true;
-            this.CurrentPath.Location = new System.Drawing.Point(30, 439);
-            this.CurrentPath.Name = "CurrentPath";
-            this.CurrentPath.Size = new System.Drawing.Size(68, 13);
-            this.CurrentPath.TabIndex = 13;
-            this.CurrentPath.Text = "Current path:";
+            this.RootPathLabel.AutoSize = true;
+            this.RootPathLabel.Location = new System.Drawing.Point(276, 79);
+            this.RootPathLabel.Name = "RootPathLabel";
+            this.RootPathLabel.Size = new System.Drawing.Size(0, 13);
+            this.RootPathLabel.TabIndex = 13;
+            this.RootPathLabel.Text = this.FolderBrowserDialog.SelectedPath;
             // 
-            // CurrentDirPath
+            // StopSearchBtn
             // 
-            this.CurrentDirPath.AutoSize = true;
-            this.CurrentDirPath.Location = new System.Drawing.Point(140, 439);
-            this.CurrentDirPath.Name = "CurrentDirPath";
-            this.CurrentDirPath.Size = new System.Drawing.Size(211, 13);
-            this.CurrentDirPath.TabIndex = 14;
-            this.CurrentDirPath.Text = this.FolderBrowserDialog.SelectedPath;
+            this.StopSearchBtn.Enabled = false;
+            this.StopSearchBtn.Location = new System.Drawing.Point(114, 74);
+            this.StopSearchBtn.Name = "StopSearchBtn";
+            this.StopSearchBtn.Size = new System.Drawing.Size(75, 23);
+            this.StopSearchBtn.TabIndex = 14;
+            this.StopSearchBtn.Text = "Stop";
+            this.StopSearchBtn.UseVisualStyleBackColor = true;
+            this.StopSearchBtn.Click += new System.EventHandler(this.StopSearchBtn_Click);
             // 
             // FileSearchForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(724, 499);
-            this.Controls.Add(this.CurrentDirPath);
-            this.Controls.Add(this.CurrentPath);
+            this.Controls.Add(this.StopSearchBtn);
+            this.Controls.Add(this.RootPathLabel);
             this.Controls.Add(this.MatchedFilesCount);
             this.Controls.Add(this.ScannedFilesCount);
             this.Controls.Add(this.MatchedFilesCounter);
@@ -183,8 +185,8 @@
         private System.Windows.Forms.Label MatchedFilesCounter;
         private System.Windows.Forms.Label ScannedFilesCount;
         private System.Windows.Forms.Label MatchedFilesCount;
-        private System.Windows.Forms.Label CurrentPath;
-        private System.Windows.Forms.Label CurrentDirPath;
+        private System.Windows.Forms.Label RootPathLabel;
+        private System.Windows.Forms.Button StopSearchBtn;
     }
 }
 

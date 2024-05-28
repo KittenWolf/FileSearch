@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows.Forms;
 
@@ -7,12 +6,15 @@ namespace FileSearch
 {
     public partial class FileSearchForm : Form
     {
-        private LinkedList<TreeNode> ActiveBranch = new LinkedList<TreeNode>();
+        private readonly FileSearcher _fileSearcher;
 
         public FileSearchForm()
         {
             InitializeComponent();
             InitializeBackgroundWorker();
+
+            _fileSearcher = new FileSearcher(FileExplorer);
+            _fileSearcher.SetRoot(FolderBrowserDialog.SelectedPath);
         }
 
         private void InitializeBackgroundWorker()
@@ -24,13 +26,10 @@ namespace FileSearch
 
         private void BackgroundWorker_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
-            var results = e.UserState as SearchResults;
+            var results = e.UserState as SearchResult;
 
             ScannedFilesCount.Text = results.ScannedFilesCount.ToString();
             MatchedFilesCount.Text = results.MatchedFilesCount.ToString();
-            CurrentDirPath.Text = results.ActiveBranch?.Last?.Value.Text.ToString();
-
-            ActiveBranch = results.ActiveBranch;
         }
 
         private void BackgroundWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
@@ -40,55 +39,42 @@ namespace FileSearch
                 Console.WriteLine("Background operation was canceled.");
             } 
 
-            SearchBtn.Text = "Start";
-            ActiveBranch = new LinkedList<TreeNode>();
+            SearchBtn.Enabled = true;
+            StopSearchBtn.Enabled = false;
         }
 
         private void BackgroundWorker_DoWork(object sender, DoWorkEventArgs e)
         {
             var worker = sender as BackgroundWorker;
+            var pattern = FileRegEx.Text.Trim();
 
             worker.WorkerSupportsCancellation = true;
             worker.WorkerReportsProgress = true;
-
-            var fileSearcher = new FileSearcher(FileExplorer, worker, e);
-            var pattern = FileRegEx.Text.Trim();
             
-            fileSearcher.Search(ActiveBranch, pattern);
+            _fileSearcher.SetWorker(worker, e);
+            _fileSearcher.Search(pattern);
         }
 
         private void ChangeDirectoryBtn_Click(object sender, EventArgs e)
         {
             if (FolderBrowserDialog.ShowDialog(this) == DialogResult.OK)
             {
-                SetRootNode(FolderBrowserDialog.SelectedPath);
+                _fileSearcher.SetRoot(FolderBrowserDialog.SelectedPath);
             }
-        }        
-
-        private void SetRootNode(string path)
-        {
-            FileExplorer.Nodes.Clear();
-            ActiveBranch.Clear();
-
-            var root = new TreeNode(path);
-
-            ActiveBranch.AddFirst(root);
-            FileExplorer.Nodes.Add(root);
         }
 
         private void SearchBtn_Click(object sender, EventArgs e)
         {
-            if (!BackgroundWorker.IsBusy)
-            {
-                SetRootNode(FolderBrowserDialog.SelectedPath);
-                BackgroundWorker.RunWorkerAsync();
-                SearchBtn.Text = "Stop";
-            } 
-            else
-            {
-                BackgroundWorker.CancelAsync();
-                SearchBtn.Text = "Start";
-            }
+            BackgroundWorker.RunWorkerAsync();
+            StopSearchBtn.Enabled = true; 
+            SearchBtn.Enabled = false;
+        }
+
+        private void StopSearchBtn_Click(object sender, EventArgs e)
+        {
+            BackgroundWorker.CancelAsync();
+            StopSearchBtn.Enabled = false; 
+            SearchBtn.Enabled = true;
         }
     }
 }

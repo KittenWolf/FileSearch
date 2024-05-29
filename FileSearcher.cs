@@ -190,7 +190,7 @@ namespace FileSearch
             _treeView.BeginInvoke(new Action(() =>
             {
                 _treeView.BeginUpdate();
-                _treeView.Nodes.AddRange(nodes);
+                _treeView.Nodes[0].Nodes.AddRange(nodes);
                 _treeView.EndUpdate();
             })).AsyncWaitHandle.WaitOne();
 
@@ -199,6 +199,8 @@ namespace FileSearch
 
         private void UpdateTreeViewNode(TreeNode dir, params TreeNode[] nodes)
         {
+            // Не знаю как иначе.
+            // Без остановки потока слишком часто перерисовывается компонент и с ним невозможно взаимодействовать
             Thread.Sleep(10);
 
             _treeView.BeginInvoke(new Action(() =>

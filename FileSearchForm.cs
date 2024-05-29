@@ -60,6 +60,7 @@ namespace FileSearch
             if (FolderBrowserDialog.ShowDialog(this) == DialogResult.OK)
             {
                 _fileSearcher.SetRoot(FolderBrowserDialog.SelectedPath);
+                RootPathLabel.Text = FolderBrowserDialog.SelectedPath;
             }
         }
 

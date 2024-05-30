@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Windows.Forms;
 
 namespace FileSearch
@@ -14,7 +15,6 @@ namespace FileSearch
             InitializeBackgroundWorker();
 
             _fileSearcher = new FileSearcher(FileExplorer);
-            _fileSearcher.SetRoot(FolderBrowserDialog.SelectedPath);
         }
 
         private void InitializeBackgroundWorker()
@@ -28,17 +28,15 @@ namespace FileSearch
         {
             var results = e.UserState as SearchResult;
 
+            CurrentPath.Text = results.CurrentPath;
+            DirectoriesCount.Text = results.DirectoriesCount.ToString();
             ScannedFilesCount.Text = results.ScannedFilesCount.ToString();
             MatchedFilesCount.Text = results.MatchedFilesCount.ToString();
+            ElapsedTime.Text = results.ElapsedTime.ToString();
         }
 
         private void BackgroundWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-            if (e.Cancelled)
-            {
-                Console.WriteLine("Background operation was canceled.");
-            } 
-
             SearchBtn.Enabled = true;
             StopSearchBtn.Enabled = false;
         }
@@ -52,14 +50,13 @@ namespace FileSearch
             worker.WorkerReportsProgress = true;
             
             _fileSearcher.SetWorker(worker, e);
-            _fileSearcher.Search(pattern);
+            _fileSearcher.Search(FolderBrowserDialog.SelectedPath, pattern);
         }
 
         private void ChangeDirectoryBtn_Click(object sender, EventArgs e)
         {
             if (FolderBrowserDialog.ShowDialog(this) == DialogResult.OK)
             {
-                _fileSearcher.SetRoot(FolderBrowserDialog.SelectedPath);
                 RootPathLabel.Text = FolderBrowserDialog.SelectedPath;
             }
         }

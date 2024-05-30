@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.IO;
 using System.Text.RegularExpressions;
 using System.Threading;
@@ -10,9 +11,11 @@ namespace FileSearch
 {
     internal class SearchResult
     {
+        public string CurrentPath { get; set; }
+        public int DirectoriesCount { get; set; } = 0;
         public int ScannedFilesCount { get; set; } = 0;
         public int MatchedFilesCount { get; set; } = 0;
-        public int DirectoriesCount { get; set; } = 0;
+        public TimeSpan ElapsedTime { get; set; }
     }
 
     internal class FileSearcher
@@ -25,6 +28,9 @@ namespace FileSearch
         public Regex RegEx { get; private set; }
         public FileDirectory Root { get; private set; }
         public SearchResult Result { get; private set; }
+
+        public Stopwatch Stopwatch { get; private set; } = new Stopwatch();
+        public bool IsSearchRunning { get; private set; } = false;
 
         internal class FileDirectory
         {
@@ -48,12 +54,6 @@ namespace FileSearch
 
             public void Search()
             {
-                if (FileSearcher.Worker.CancellationPending)
-                {
-                    FileSearcher.EventArgs.Cancel = true;
-                    return;
-                }
-
                 if (IsSearchComplited)
                 {
                     return;
@@ -61,25 +61,32 @@ namespace FileSearch
 
                 foreach (var dir in FileDirectories)
                 {
+                    FileSearcher.Result.DirectoriesCount++;
+
                     dir.Search();
 
                     if (FileSearcher.Worker.CancellationPending)
                     {
+                        FileSearcher.Stopwatch.Stop();
+                        FileSearcher.EventArgs.Cancel = true;
+
                         return;
                     }
                 }
+
+                FileSearcher.Result.CurrentPath = DirectoryPath;
 
                 var fileNodes = GetFileNodes();
 
                 if (fileNodes.Length > 0)
                 {
-                    if (Node.Parent != null)
-                    {
-                        FileSearcher.UpdateTreeViewNode(Node, fileNodes);
-                    }
-                    else if (Equals(FileSearcher.Root))
+                    if (Equals(FileSearcher.Root))
                     {
                         FileSearcher.UpdateRootNode(fileNodes);
+                    }
+                    else if (Node.Parent != null)
+                    {
+                        FileSearcher.UpdateTreeViewNode(Node, fileNodes);
                     }
                     else
                     {
@@ -153,6 +160,14 @@ namespace FileSearch
                 FileSearcher.UpdateTreeViewNode(parent.Node, self.Node);
             }
 
+            public void Reset()
+            {
+                IsSearchComplited = false;
+
+                FileDirectories.Clear();
+                Node.Nodes.Clear();
+            }
+
             public override string ToString()
             {
                 return DirectoryPath;
@@ -164,25 +179,52 @@ namespace FileSearch
             _treeView = treeView;
         }
 
-        public void SetRoot(string path)
-        {
-            Result = new SearchResult();
-            Root = new FileDirectory(path, this);
-            _treeView.Nodes.Clear();
-            _treeView.Nodes.Add(Root.Node);
-        }
-
         public void SetWorker(BackgroundWorker worker, DoWorkEventArgs e)
         {
             Worker = worker;
             EventArgs = e;
         }
 
-        public void Search(string pattern)
+        public void Search(string path, string pattern)
         {
-            RegEx = new Regex(pattern);
+            if (!IsSearchRunning || path != Root?.DirectoryPath)
+            {
+                RegEx = new Regex(pattern);
+                Reset(path);
+            }
 
+            IsSearchRunning = true;
+
+            Stopwatch.Start();
             Root.Search();
+
+            if (Root.IsSearchComplited)
+            {
+                IsSearchRunning = false;
+            }
+        }
+
+        private void Reset(string path)
+        {
+            IsSearchRunning = false;
+
+            Root = new FileDirectory(path, this);
+            Result = new SearchResult()
+            {
+                CurrentPath = Root.DirectoryPath
+            };
+
+            Stopwatch.Reset();
+            ResetTreeView();
+            UpdateRootNode(Root.Node);
+        }
+
+        private void ResetTreeView()
+        {
+            _treeView.BeginInvoke(new Action(() =>
+            {
+                _treeView.Nodes.Clear();
+            })).AsyncWaitHandle.WaitOne();
         }
 
         private void UpdateRootNode(params TreeNode[] nodes)
@@ -190,10 +232,11 @@ namespace FileSearch
             _treeView.BeginInvoke(new Action(() =>
             {
                 _treeView.BeginUpdate();
-                _treeView.Nodes[0].Nodes.AddRange(nodes);
+                _treeView.Nodes.AddRange(nodes);
                 _treeView.EndUpdate();
             })).AsyncWaitHandle.WaitOne();
 
+            Result.ElapsedTime = Stopwatch.Elapsed;
             Worker.ReportProgress(0, Result);
         }
 
@@ -210,6 +253,7 @@ namespace FileSearch
                 _treeView.EndUpdate();
             })).AsyncWaitHandle.WaitOne();
 
+            Result.ElapsedTime = Stopwatch.Elapsed;
             Worker.ReportProgress(0, Result);
         }
     }

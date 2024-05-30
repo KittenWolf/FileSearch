@@ -41,6 +41,12 @@
             this.MatchedFilesCount = new System.Windows.Forms.Label();
             this.RootPathLabel = new System.Windows.Forms.Label();
             this.StopSearchBtn = new System.Windows.Forms.Button();
+            this.CurrentPathLabel = new System.Windows.Forms.Label();
+            this.CurrentPath = new System.Windows.Forms.Label();
+            this.DirectoriesCounter = new System.Windows.Forms.Label();
+            this.DirectoriesCount = new System.Windows.Forms.Label();
+            this.ElapsedTimer = new System.Windows.Forms.Label();
+            this.ElapsedTime = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // SearchBtn
@@ -96,7 +102,7 @@
             // ScannedFilesCounter
             // 
             this.ScannedFilesCounter.AutoSize = true;
-            this.ScannedFilesCounter.Location = new System.Drawing.Point(30, 465);
+            this.ScannedFilesCounter.Location = new System.Drawing.Point(30, 490);
             this.ScannedFilesCounter.Name = "ScannedFilesCounter";
             this.ScannedFilesCounter.Size = new System.Drawing.Size(104, 13);
             this.ScannedFilesCounter.TabIndex = 9;
@@ -105,7 +111,7 @@
             // MatchedFilesCounter
             // 
             this.MatchedFilesCounter.AutoSize = true;
-            this.MatchedFilesCounter.Location = new System.Drawing.Point(30, 452);
+            this.MatchedFilesCounter.Location = new System.Drawing.Point(30, 477);
             this.MatchedFilesCounter.Name = "MatchedFilesCounter";
             this.MatchedFilesCounter.Size = new System.Drawing.Size(75, 13);
             this.MatchedFilesCounter.TabIndex = 10;
@@ -114,7 +120,7 @@
             // ScannedFilesCount
             // 
             this.ScannedFilesCount.AutoSize = true;
-            this.ScannedFilesCount.Location = new System.Drawing.Point(140, 465);
+            this.ScannedFilesCount.Location = new System.Drawing.Point(140, 490);
             this.ScannedFilesCount.Name = "ScannedFilesCount";
             this.ScannedFilesCount.Size = new System.Drawing.Size(13, 13);
             this.ScannedFilesCount.TabIndex = 11;
@@ -123,7 +129,7 @@
             // MatchedFilesCount
             // 
             this.MatchedFilesCount.AutoSize = true;
-            this.MatchedFilesCount.Location = new System.Drawing.Point(140, 452);
+            this.MatchedFilesCount.Location = new System.Drawing.Point(140, 477);
             this.MatchedFilesCount.Name = "MatchedFilesCount";
             this.MatchedFilesCount.Size = new System.Drawing.Size(13, 13);
             this.MatchedFilesCount.TabIndex = 12;
@@ -134,7 +140,7 @@
             this.RootPathLabel.AutoSize = true;
             this.RootPathLabel.Location = new System.Drawing.Point(276, 79);
             this.RootPathLabel.Name = "RootPathLabel";
-            this.RootPathLabel.Size = new System.Drawing.Size(0, 13);
+            this.RootPathLabel.Size = new System.Drawing.Size(211, 13);
             this.RootPathLabel.TabIndex = 13;
             this.RootPathLabel.Text = this.FolderBrowserDialog.SelectedPath;
             // 
@@ -149,11 +155,71 @@
             this.StopSearchBtn.UseVisualStyleBackColor = true;
             this.StopSearchBtn.Click += new System.EventHandler(this.StopSearchBtn_Click);
             // 
+            // CurrentPathLabel
+            // 
+            this.CurrentPathLabel.AutoSize = true;
+            this.CurrentPathLabel.Location = new System.Drawing.Point(30, 451);
+            this.CurrentPathLabel.Name = "CurrentPathLabel";
+            this.CurrentPathLabel.Size = new System.Drawing.Size(32, 13);
+            this.CurrentPathLabel.TabIndex = 15;
+            this.CurrentPathLabel.Text = "Path:";
+            // 
+            // CurrentPath
+            // 
+            this.CurrentPath.AutoSize = true;
+            this.CurrentPath.Location = new System.Drawing.Point(140, 451);
+            this.CurrentPath.Name = "CurrentPath";
+            this.CurrentPath.Size = new System.Drawing.Size(211, 13);
+            this.CurrentPath.TabIndex = 16;
+            this.CurrentPath.Text = this.FolderBrowserDialog.SelectedPath;
+            // 
+            // DirectoriesCounter
+            // 
+            this.DirectoriesCounter.AutoSize = true;
+            this.DirectoriesCounter.Location = new System.Drawing.Point(30, 464);
+            this.DirectoriesCounter.Name = "DirectoriesCounter";
+            this.DirectoriesCounter.Size = new System.Drawing.Size(90, 13);
+            this.DirectoriesCounter.TabIndex = 17;
+            this.DirectoriesCounter.Text = "Directories count:";
+            // 
+            // DirectoriesCount
+            // 
+            this.DirectoriesCount.AutoSize = true;
+            this.DirectoriesCount.Location = new System.Drawing.Point(140, 464);
+            this.DirectoriesCount.Name = "DirectoriesCount";
+            this.DirectoriesCount.Size = new System.Drawing.Size(13, 13);
+            this.DirectoriesCount.TabIndex = 18;
+            this.DirectoriesCount.Text = "0";
+            // 
+            // ElapsedTimer
+            // 
+            this.ElapsedTimer.AutoSize = true;
+            this.ElapsedTimer.Location = new System.Drawing.Point(30, 510);
+            this.ElapsedTimer.Name = "ElapsedTimer";
+            this.ElapsedTimer.Size = new System.Drawing.Size(36, 13);
+            this.ElapsedTimer.TabIndex = 19;
+            this.ElapsedTimer.Text = "Timer:";
+            // 
+            // ElapsedTime
+            // 
+            this.ElapsedTime.AutoSize = true;
+            this.ElapsedTime.Location = new System.Drawing.Point(140, 510);
+            this.ElapsedTime.Name = "ElapsedTime";
+            this.ElapsedTime.Size = new System.Drawing.Size(13, 13);
+            this.ElapsedTime.TabIndex = 20;
+            this.ElapsedTime.Text = "0";
+            // 
             // FileSearchForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(724, 499);
+            this.ClientSize = new System.Drawing.Size(724, 532);
+            this.Controls.Add(this.ElapsedTime);
+            this.Controls.Add(this.ElapsedTimer);
+            this.Controls.Add(this.DirectoriesCount);
+            this.Controls.Add(this.DirectoriesCounter);
+            this.Controls.Add(this.CurrentPath);
+            this.Controls.Add(this.CurrentPathLabel);
             this.Controls.Add(this.StopSearchBtn);
             this.Controls.Add(this.RootPathLabel);
             this.Controls.Add(this.MatchedFilesCount);
@@ -187,6 +253,12 @@
         private System.Windows.Forms.Label MatchedFilesCount;
         private System.Windows.Forms.Label RootPathLabel;
         private System.Windows.Forms.Button StopSearchBtn;
+        private System.Windows.Forms.Label CurrentPathLabel;
+        private System.Windows.Forms.Label CurrentPath;
+        private System.Windows.Forms.Label DirectoriesCounter;
+        private System.Windows.Forms.Label DirectoriesCount;
+        private System.Windows.Forms.Label ElapsedTimer;
+        private System.Windows.Forms.Label ElapsedTime;
     }
 }
 

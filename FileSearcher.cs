@@ -109,7 +109,8 @@ namespace FileSearch
                 }
                 catch (Exception)
                 {
-                    throw;
+                    Console.WriteLine("Error");
+                    //throw;
                 }
             }
 
@@ -134,7 +135,8 @@ namespace FileSearch
                 }
                 catch (Exception)
                 {
-                    throw;
+                    Console.WriteLine("Error");
+                    //throw;
                 }
 
                 return nodes.ToArray();
